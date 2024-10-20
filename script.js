@@ -142,6 +142,43 @@ calculator.addEventListener("click", (e) => {
 				percentage(secondNumOnDisplay);
 		}
 	}
+	// pressed the +/- button
+	else if (target.id == "invert") {
+		if (secondNumOnDisplay == undefined || secondNumOnDisplay == "") {
+			if (firstNumOnDisplay[0] != "-") {
+				display.textContent = "-" + firstNumOnDisplay;
+			} else {
+				display.textContent = firstNumOnDisplay.replace("-", "");
+			}
+		} else if (secondNumOnDisplay != undefined && secondNumOnDisplay != "") {
+			if (
+				secondNumOnDisplay[0] != "-" &&
+				operatorOnDisplay != "+" &&
+				operatorOnDisplay != "-"
+			) {
+				display.textContent =
+					firstNumOnDisplay +
+					" " +
+					operatorOnDisplay +
+					" " +
+					"-" +
+					secondNumOnDisplay;
+			} else if (secondNumOnDisplay[0] != "-" && operatorOnDisplay == "+") {
+				display.textContent =
+					firstNumOnDisplay + " " + "-" + " " + secondNumOnDisplay;
+			} else if (secondNumOnDisplay[0] != "-" && operatorOnDisplay == "-") {
+				display.textContent =
+					firstNumOnDisplay + " " + "+" + " " + secondNumOnDisplay;
+			} else {
+				display.textContent =
+					firstNumOnDisplay +
+					" " +
+					operatorOnDisplay +
+					" " +
+					secondNumOnDisplay.replace("-", "");
+			}
+		}
+	}
 	// pressed the C button to delete everything
 	else if (target.id == "C") {
 		display.textContent = "0";
