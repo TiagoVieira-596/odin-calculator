@@ -63,15 +63,16 @@ digits.addEventListener("click", (e) => {
 			display.textContent += " " + target.id + " ";
 		}
 		// if there is a full operation on display, finish this one and start the other
-		else if (
-			["x", "÷", "+", "-"].includes(operatorOnDisplay) &&
-			secondNumOnDisplay != ""
-		) {
+		else if (["x", "÷", "+", "-"].includes(operatorOnDisplay)) {
+			if (secondNumOnDisplay == "") {
+				return;
+			}
 			display.textContent = operate(
 				operatorOnDisplay,
 				firstNumOnDisplay,
 				secondNumOnDisplay
 			);
+			display.textContent += " " + target.id + " ";
 		}
 		// if the user presses an operation before finishing one
 		else {
