@@ -1,0 +1,85 @@
+* {
+	font-family: "Roboto", Arial, sans-serif;
+	font-weight: 900;
+	color: rgb(255, 255, 255);
+}
+
+button {
+	border: 0;
+}
+
+.container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.calculator {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	align-content: center;
+	padding: 12px;
+	border-radius: 6px;
+	background-color: rgb(128, 128, 128);
+}
+
+.display {
+	display: flex;
+	justify-content: end;
+	align-items: center;
+	width: 242px;
+	height: 60px;
+	background-color: rgb(100, 100, 100);
+	padding-right: 4px;
+	margin-bottom: 6px;
+	border-radius: 6px;
+}
+
+.CEBtn,
+.CBtn {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: rgb(190, 54, 54);
+	width: 120px;
+	height: 60px;
+	border-radius: 6px;
+}
+
+.specialButtons {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 6px;
+	margin-bottom: 6px;
+}
+
+.digits {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.row {
+	display: flex;
+	gap: 2px;
+}
+
+.digit {
+	width: 60px;
+	height: 60px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: rgb(140, 140, 140);
+	border-radius: 6px;
+}
+
+.equal {
+	background-color: rgb(255, 88, 88);
+}
+
+.operation {
+	background-color: rgb(158, 158, 158);
+}
