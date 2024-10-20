@@ -36,23 +36,10 @@ button {
 	border-radius: 6px;
 }
 
-.CEBtn,
-.CBtn {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+#CE,
+#C,
+#invert {
 	background-color: rgb(190, 54, 54);
-	width: 120px;
-	height: 60px;
-	border-radius: 6px;
-}
-
-.specialButtons {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 6px;
-	margin-bottom: 6px;
 }
 
 .digits {

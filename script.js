@@ -1,17 +1,22 @@
+// functions for each operation
 function add(num1, num2) {
-	return +(+num1 + +num2).toFixed(6);
+	return +(+num1 + +num2).toFixed(16);
 }
 
 function subtract(num1, num2) {
-	return +(num1 - num2).toFixed(6);
+	return +(num1 - num2).toFixed(16);
 }
 
 function multiply(num1, num2) {
-	return +(num1 * num2).toFixed(6);
+	return +(num1 * num2).toFixed(16);
 }
 
 function divide(num1, num2) {
-	return +(num1 / num2).toFixed(6);
+	return +(num1 / num2).toFixed(16);
+}
+
+function percentage(number) {
+	return +(number / 100).toFixed(16);
 }
 
 function operate(operator, num1, num2) {
@@ -121,14 +126,30 @@ calculator.addEventListener("click", (e) => {
 			);
 		}
 	}
-	// pressed the C button
+	// pressed the % button
+	else if (target.id == "%") {
+		if (
+			(secondNumOnDisplay == undefined || secondNumOnDisplay == "") &&
+			operatorOnDisplay == undefined
+		) {
+			display.textContent = percentage(firstNumOnDisplay);
+		} else if (secondNumOnDisplay != undefined && secondNumOnDisplay != "") {
+			display.textContent =
+				firstNumOnDisplay +
+				" " +
+				operatorOnDisplay +
+				" " +
+				percentage(secondNumOnDisplay);
+		}
+	}
+	// pressed the C button to delete everything
 	else if (target.id == "C") {
 		display.textContent = "0";
 		firstNumOnDisplay = "0";
 		operatorOnDisplay = undefined;
 		secondNumOnDisplay = undefined;
 	}
-	// pressed the CE button
+	// pressed the CE button to delete the last typed operand
 	else if (target.id == "CE") {
 		if (secondNumOnDisplay == undefined || secondNumOnDisplay == "") {
 			display.textContent = "0";
@@ -143,12 +164,15 @@ calculator.addEventListener("click", (e) => {
 	}
 });
 
+// change the opacity of buttons when you hover over them
 calculator.addEventListener("mouseover", (e) => {
 	let target = e.target;
 
 	if (
 		((target.id >= 0 && target.id <= 9) ||
-			["+", "-", "x", "÷", "=", ".", "CE", "C"].includes(target.id)) &&
+			["+", "-", "x", "÷", "=", ".", "CE", "C", "%", "invert"].includes(
+				target.id
+			)) &&
 		target.id != ""
 	) {
 		target.style.opacity = "0.6";
@@ -160,7 +184,9 @@ calculator.addEventListener("mouseout", (e) => {
 
 	if (
 		((target.id >= 0 && target.id <= 9) ||
-			["+", "-", "x", "÷", "=", ".", "CE", "C"].includes(target.id)) &&
+			["+", "-", "x", "÷", "=", ".", "CE", "C", "%", "invert"].includes(
+				target.id
+			)) &&
 		target.id != ""
 	) {
 		target.style.opacity = "1";
