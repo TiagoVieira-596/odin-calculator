@@ -92,12 +92,16 @@ calculator.addEventListener("click", (e) => {
 	// if the fraction digit is clicked
 	else if (target.id == ".") {
 		// if both the elements on display aren't fractional add the .
-		if (
-			!firstNumOnDisplay.includes(".") &&
-			display.textContent.at(-1) != " " &&
-			firstNumOnDisplay != ""
-		) {
-			if (
+		if (!firstNumOnDisplay.includes(".") && firstNumOnDisplay != "") {
+			if (display.textContent.at(-1) == " ") {
+				secondNumOnDisplay = "0.";
+				display.textContent =
+					firstNumOnDisplay +
+					" " +
+					operatorOnDisplay +
+					" " +
+					secondNumOnDisplay;
+			} else if (
 				secondNumOnDisplay != undefined &&
 				!secondNumOnDisplay.includes(".")
 			) {
@@ -109,10 +113,19 @@ calculator.addEventListener("click", (e) => {
 		// if the second element on display isn't fractional and the first is, add the .
 		else if (
 			!secondNumOnDisplay.includes(".") &&
-			secondNumOnDisplay != "" &&
 			firstNumOnDisplay.includes(".")
 		) {
-			display.textContent += ".";
+			if (display.textContent.at(-1) == " ") {
+				secondNumOnDisplay = "0.";
+				display.textContent =
+					firstNumOnDisplay +
+					" " +
+					operatorOnDisplay +
+					" " +
+					secondNumOnDisplay;
+			} else {
+				display.textContent += ".";
+			}
 		}
 	}
 	// if the equal digit is clicked
