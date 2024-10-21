@@ -12,6 +12,9 @@ function multiply(num1, num2) {
 }
 
 function divide(num1, num2) {
+	if (num2 == 0) {
+		return "ERROR";
+	}
 	return +(num1 / num2).toFixed(16);
 }
 
@@ -36,26 +39,27 @@ function operate(operator, num1, num2) {
 const calculator = document.querySelector(".calculator");
 let display = document.querySelector(".display");
 
+let firstNumOnDisplay = display.textContent.split(" ")[0];
+let secondNumOnDisplay = display.textContent.split(" ")[2];
+let operatorOnDisplay = display.textContent.split(" ")[1];
+
 calculator.addEventListener("click", (e) => {
 	// create variables for each element on display
 	let target = e.target;
-	let firstNumOnDisplay = display.textContent.split(" ")[0];
-	let secondNumOnDisplay = display.textContent.split(" ")[2];
-	let operatorOnDisplay = display.textContent.split(" ")[1];
+	firstNumOnDisplay = display.textContent.split(" ")[0];
+	secondNumOnDisplay = display.textContent.split(" ")[2];
+	operatorOnDisplay = display.textContent.split(" ")[1];
 
-	// pressed somewhere else
+	// clicked somewhere else
 	if (target.id == "") {
 		return;
 	}
 
 	// if a number digit is clicked
-	if (target.id >= 0 && target.id <= 9) {
+	if (target.id >= 0 && target.id <= 9 && firstNumOnDisplay != "ERROR") {
 		// don't allow for repeatedly pressing the 0 button if not inside a number
 		if (firstNumOnDisplay == "0" && operatorOnDisplay == undefined) {
-			display.textContent = display.textContent.replace(
-				firstNumOnDisplay,
-				target.id
-			);
+			display.textContent = target.id;
 			return;
 		} else if (secondNumOnDisplay == "0") {
 			display.textContent = display.textContent.replace(
@@ -67,7 +71,10 @@ calculator.addEventListener("click", (e) => {
 		display.textContent += target.id;
 	}
 	// if an operation digit is clicked
-	else if (["x", "÷", "+", "-"].includes(target.id)) {
+	else if (
+		["x", "÷", "+", "-"].includes(target.id) &&
+		firstNumOnDisplay != "ERROR"
+	) {
 		// there is no operator on display
 		if (!["x", "÷", "+", "-"].includes(operatorOnDisplay)) {
 			display.textContent += " " + target.id + " ";
@@ -90,7 +97,7 @@ calculator.addEventListener("click", (e) => {
 		}
 	}
 	// if the fraction digit is clicked
-	else if (target.id == ".") {
+	else if (target.id == "." && firstNumOnDisplay != "ERROR") {
 		// if both the elements on display aren't fractional add the .
 		if (!firstNumOnDisplay.includes(".") && firstNumOnDisplay != "") {
 			if (display.textContent.at(-1) == " ") {
@@ -129,9 +136,12 @@ calculator.addEventListener("click", (e) => {
 		}
 	}
 	// if the equal digit is clicked
-	else if (target.id == "=") {
+	else if (target.id == "=" && firstNumOnDisplay != "ERROR") {
 		// make the operation if there is one to be made
-		if (["x", "÷", "+", "-"].includes(operatorOnDisplay)) {
+		if (
+			["x", "÷", "+", "-"].includes(operatorOnDisplay) &&
+			secondNumOnDisplay != ""
+		) {
 			display.textContent = operate(
 				operatorOnDisplay,
 				firstNumOnDisplay,
@@ -140,7 +150,7 @@ calculator.addEventListener("click", (e) => {
 		}
 	}
 	// pressed the % button
-	else if (target.id == "%") {
+	else if (target.id == "%" && firstNumOnDisplay != "ERROR") {
 		if (
 			(secondNumOnDisplay == undefined || secondNumOnDisplay == "") &&
 			operatorOnDisplay == undefined
@@ -156,7 +166,7 @@ calculator.addEventListener("click", (e) => {
 		}
 	}
 	// pressed the +/- button
-	else if (target.id == "invert") {
+	else if (target.id == "invert" && firstNumOnDisplay != "ERROR") {
 		if (secondNumOnDisplay == undefined || secondNumOnDisplay == "") {
 			if (firstNumOnDisplay[0] != "-") {
 				display.textContent = "-" + firstNumOnDisplay;
@@ -240,5 +250,142 @@ calculator.addEventListener("mouseout", (e) => {
 		target.id != ""
 	) {
 		target.style.opacity = "1";
+	}
+});
+
+document.addEventListener("keyup", (e) => {
+	let key = e.key;
+	firstNumOnDisplay = display.textContent.split(" ")[0];
+	secondNumOnDisplay = display.textContent.split(" ")[2];
+	operatorOnDisplay = display.textContent.split(" ")[1];
+
+	if (key >= 0 && key <= 9 && firstNumOnDisplay != "ERROR") {
+		if (operatorOnDisplay == undefined) {
+			if (firstNumOnDisplay == "0") {
+				display.textContent = key;
+				return;
+			}
+			firstNumOnDisplay += parseInt(key);
+			display.textContent = firstNumOnDisplay;
+		} else {
+			if (firstNumOnDisplay == "0") {
+				secondNumOnDisplay = key;
+				display.textContent += secondNumOnDisplay;
+				return;
+			}
+			secondNumOnDisplay += key;
+			display.textContent =
+				firstNumOnDisplay + " " + operatorOnDisplay + " " + secondNumOnDisplay;
+		}
+	} else if (
+		["+", "-", "/", "x", "*"].includes(key) &&
+		firstNumOnDisplay != "ERROR"
+	) {
+		if (operatorOnDisplay == undefined || operatorOnDisplay == "") {
+			if (key == "/") {
+				operatorOnDisplay = "÷";
+				display.textContent = firstNumOnDisplay + " " + operatorOnDisplay + " ";
+			} else if (key == "*") {
+				operatorOnDisplay = "x";
+				display.textContent = firstNumOnDisplay + " " + operatorOnDisplay + " ";
+			} else {
+				operatorOnDisplay = key;
+				display.textContent = firstNumOnDisplay + " " + operatorOnDisplay + " ";
+			}
+		} else if (operatorOnDisplay != "") {
+			if (secondNumOnDisplay == "") {
+				if (key == "/") {
+					display.textContent = display.textContent.replace(
+						operatorOnDisplay,
+						"÷"
+					);
+					return;
+				} else if (key == "*") {
+					display.textContent = display.textContent.replace(
+						operatorOnDisplay,
+						"x"
+					);
+					return;
+				} else {
+					display.textContent = display.textContent.replace(
+						operatorOnDisplay,
+						key
+					);
+				}
+			} else {
+				display.textContent = operate(
+					operatorOnDisplay,
+					firstNumOnDisplay,
+					secondNumOnDisplay
+				);
+				if (key == "*") {
+					display.textContent += " " + "x" + " ";
+					return;
+				} else if (key == "/") {
+					display.textContent += " " + "÷" + " ";
+					return;
+				}
+				display.textContent += " " + key + " ";
+			}
+		}
+	} else if (key == "%" && firstNumOnDisplay != "ERROR") {
+		if (
+			(secondNumOnDisplay == undefined || secondNumOnDisplay == "") &&
+			operatorOnDisplay == undefined
+		) {
+			display.textContent = percentage(firstNumOnDisplay);
+		} else if (secondNumOnDisplay != undefined && secondNumOnDisplay != "") {
+			display.textContent =
+				firstNumOnDisplay +
+				" " +
+				operatorOnDisplay +
+				" " +
+				percentage(secondNumOnDisplay);
+		}
+	} else if ((key == "Enter" || key == "=") && firstNumOnDisplay != "ERROR") {
+		if (
+			["x", "÷", "+", "-"].includes(operatorOnDisplay) &&
+			secondNumOnDisplay != ""
+		) {
+			display.textContent = operate(
+				operatorOnDisplay,
+				firstNumOnDisplay,
+				secondNumOnDisplay
+			);
+		}
+	} else if ((key == "." || key == ",") && firstNumOnDisplay != "ERROR") {
+		if (!firstNumOnDisplay.includes(".") && firstNumOnDisplay != "") {
+			if (display.textContent.at(-1) == " ") {
+				secondNumOnDisplay = "0.";
+				display.textContent =
+					firstNumOnDisplay +
+					" " +
+					operatorOnDisplay +
+					" " +
+					secondNumOnDisplay;
+			} else if (
+				secondNumOnDisplay != undefined &&
+				!secondNumOnDisplay.includes(".")
+			) {
+				display.textContent += ".";
+			} else if (secondNumOnDisplay == undefined) {
+				display.textContent += ".";
+			}
+		} else if (
+			!secondNumOnDisplay.includes(".") &&
+			firstNumOnDisplay.includes(".")
+		) {
+			if (display.textContent.at(-1) == " ") {
+				secondNumOnDisplay = "0.";
+				display.textContent =
+					firstNumOnDisplay +
+					" " +
+					operatorOnDisplay +
+					" " +
+					secondNumOnDisplay;
+			} else {
+				display.textContent += ".";
+			}
+		}
 	}
 });
